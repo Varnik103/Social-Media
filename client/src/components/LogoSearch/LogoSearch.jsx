@@ -1,6 +1,6 @@
 import React from 'react'
 import {BiSearch} from 'react-icons/bi';
-import img5 from '../../img/img5.jpg'
+import img5 from '../../img/logo.png'
 import './LogoSearch.css'
 const LogoSearch = () => {
   return (
