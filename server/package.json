@@ -1,14 +1,21 @@
 {
   "dependencies": {
+    "await-to-js": "^3.0.0",
+    "bcrypt": "^5.1.0",
     "config": "^3.3.9",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "http-errors": "^2.0.0",
+    "mongoose": "^7.0.3",
+    "mongoose-type-email": "^1.1.2",
     "morgan": "^1.10.0",
     "node": "^19.8.1",
+    "parse-error": "^0.2.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.2",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1",
     "yamljs": "^0.3.0"
   },
   "scripts": {
