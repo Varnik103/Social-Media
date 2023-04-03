@@ -89,7 +89,7 @@ const del = async function(req, res){
     [err, post] = await to(postSchema.findById(id));
 	console.log(err,post);
     if (err || !post){
-        logger.error("Post controller - update - post not found");
+        logger.error("Post controller - delete - post not found");
         return ReE(res, err, 422);
     }
 	const userId = req.body.userid;
@@ -109,3 +109,45 @@ const del = async function(req, res){
     return ReS(res, {message: "Deleted Post"});
 }
 module.exports.del = del;
+
+const like = async function(req, res){
+    let postId = req.query._id;
+    let userId = req.body._id;
+    if (!postId){
+        logger.error("Post Controller - like - Post id not entered");
+        return ReE(res, new Error("Enter the Post id"), 422);
+    }
+    if (!userId){
+        logger.error("Post Controller - like - User id not entered");
+        return ReE(res, new Error("Enter the User id"), 422);
+    }
+    let err, post;
+    [err, post] = await to(postSchema.findById(postId));
+    if (err || !post){
+        logger.error("Post controller - like - post not found");
+        return ReE(res, err, 422);
+    }
+    let likesArray = post.likes;
+    console.log(likesArray);
+    likesArray.push(userId);
+    let count=0;
+    for (let index = 0; index < likesArray.length; index++) {
+        let element = likesArray[index];
+        if (element == userId){
+            count++;
+        }
+    }
+    if (count == 2){
+        for (let index = 0; index < likesArray.length; index++) {
+            let element = likesArray[index];
+            if (element == userId){
+                likesArray.splice(index,1);
+            }
+        }
+        return ReS(res, {message: "Successfully disliked"});
+    }
+    else{
+        return ReS(res, {message: "Successfully liked"});
+    }
+}
+module.exports.like = like;
