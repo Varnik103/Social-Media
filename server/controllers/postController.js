@@ -127,27 +127,40 @@ const like = async function(req, res){
         logger.error("Post controller - like - post not found");
         return ReE(res, err, 422);
     }
-    let likesArray = post.likes;
-    console.log(likesArray);
-    likesArray.push(userId);
-    let count=0;
-    for (let index = 0; index < likesArray.length; index++) {
-        let element = likesArray[index];
-        if (element == userId){
-            count++;
-        }
-    }
-    if (count == 2){
-        for (let index = 0; index < likesArray.length; index++) {
-            let element = likesArray[index];
-            if (element == userId){
-                likesArray.splice(index,1);
-            }
-        }
-        return ReS(res, {message: "Successfully disliked"});
-    }
-    else{
-        return ReS(res, {message: "Successfully liked"});
-    }
+	try{
+		if(!post.likes.includes(userId)){
+			await post.updateOne({$push : {likes : userId}})
+			return ReS(res, {message: "Successfully liked"});
+		}
+		else{
+			await post.updateOne({$pull : {likes : userId}})
+			return ReS(res, {message: "Successfully disliked"});
+		}
+	}
+	catch (error){
+		return ReE(res, "Like/Dislike Unsuccessful", 422);
+	}
+    // let likesArray = post.likes;
+    // console.log(likesArray);
+    // likesArray.push(userId);
+    // let count=0;
+    // for (let index = 0; index < likesArray.length; index++) {
+    //     let element = likesArray[index];
+    //     if (element == userId){
+    //         count++;
+    //     }
+    // }
+    // if (count == 2){
+    //     for (let index = 0; index < likesArray.length; index++) {
+    //         let element = likesArray[index];
+    //         if (element == userId){
+    //             likesArray.splice(index,1);
+    //         }
+    //     }
+    //     return ReS(res, {message: "Successfully disliked"});
+    // }
+    // else{
+    //     return ReS(res, {message: "Successfully liked"});
+    // }
 }
 module.exports.like = like;
