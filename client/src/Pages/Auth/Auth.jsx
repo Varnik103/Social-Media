@@ -58,6 +58,7 @@ const Auth = () => {
             <div>
               <input
                 type="text"
+                placeholder="First Name"
                 className="infoInput"
                 name="firstname"
                 onChange={handleChange}

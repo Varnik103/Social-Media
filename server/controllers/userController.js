@@ -53,12 +53,12 @@ const list = async function (req, res) {
 		isAdmin = req.query.isAdmin;
 		isAdmin = JSON.parse(isAdmin);
 	}
-	[err, userList] = await to(user.find().sort(isAdmin).limit(limit).skip(offset));
+	[err, userList] = await to(userSchema.find().sort(isAdmin).limit(limit).skip(offset));
 	if (err) {
 		logger.error("user Controller - list : user could not be fetched", err);
 		return ReE(res, err, 422);
 	}
-	[err, userCount] = await to(user.find().count());
+	[err, userCount] = await to(userSchema.find().count());
 	if (err) {
 		logger.error("user Controller - list : user count could not be fetched", err);
 		return ReE(res, err, 422);
@@ -83,20 +83,19 @@ const update = async function (req, res) {
 		logger.error("user Controller - update : user not found", err);
 		return ReE(res, err, 422);
 	}
-	
-	user.username = req.body.username;
-	user.password = req.body.password;
-	user.firstname = req.body.firstname;
-    user.lastname = req.body.lastname;
-	user.profilePicture = req.body.templeId;
-	user.coverPicture = req.body.coverPicture;
-	user.livesIn = req.body.livesIn;
-	user.worksAt = req.body.worksAt;
+	if (req.body.username) user.username = req.body.username;
+	if (req.body.password) user.password = req.body.password;
+	if (req.body.firstname) user.firstname = req.body.firstname;
+    if (req.body.lastname) user.lastname = req.body.lastname;
+	if (req.body.profilePicture) user.profilePicture = req.body.templeId;
+	if (req.body.coverPicture) user.coverPicture = req.body.coverPicture;
+	if (req.body.livesIn) user.livesIn = req.body.livesIn;
+	if (req.body.worksAt) user.worksAt = req.body.worksAt;
 	[err, saveduser] = await to(user.save());
 	if (err) {
 		logger.error("user Controller - update : user could not be updated", err);
 		return ReE(res, err, 422);
 	}
-	return ReS(res, { message: 'Updated user: ' + user.name });
+	return ReS(res, { message: 'Updated user: ' + user.firstname });
 }
 module.exports.update = update;
