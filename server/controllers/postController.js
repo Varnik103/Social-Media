@@ -1,6 +1,9 @@
 const logger = require('../lib/logging');
 const {to, ReE, ReS, TE} = require('../services/util.service');
 const {postSchema} = require("../models");
+const {userSchema} = require("../models");
+const mongoose = require('mongoose');
+
 
 const create = async function(req, res){
     let body = req.body;
@@ -127,27 +130,91 @@ const like = async function(req, res){
         logger.error("Post controller - like - post not found");
         return ReE(res, err, 422);
     }
-    let likesArray = post.likes;
-    console.log(likesArray);
-    likesArray.push(userId);
-    let count=0;
-    for (let index = 0; index < likesArray.length; index++) {
-        let element = likesArray[index];
-        if (element == userId){
-            count++;
-        }
-    }
-    if (count == 2){
-        for (let index = 0; index < likesArray.length; index++) {
-            let element = likesArray[index];
-            if (element == userId){
-                likesArray.splice(index,1);
-            }
-        }
-        return ReS(res, {message: "Successfully disliked"});
-    }
-    else{
-        return ReS(res, {message: "Successfully liked"});
-    }
+	try{
+		if(!post.likes.includes(userId)){
+			await post.updateOne({$push : {likes : userId}})
+			return ReS(res, {message: "Successfully liked"});
+		}
+		else{
+			await post.updateOne({$pull : {likes : userId}})
+			return ReS(res, {message: "Successfully disliked"});
+		}
+	}
+	catch (error){
+		return ReE(res, "Like/Dislike Unsuccessful", 422);
+	}
+    // let likesArray = post.likes;
+    // console.log(likesArray);
+    // likesArray.push(userId);
+    // let count=0;
+    // for (let index = 0; index < likesArray.length; index++) {
+    //     let element = likesArray[index];
+    //     if (element == userId){
+    //         count++;
+    //     }
+    // }
+    // if (count == 2){
+    //     for (let index = 0; index < likesArray.length; index++) {
+    //         let element = likesArray[index];
+    //         if (element == userId){
+    //             likesArray.splice(index,1);
+    //         }
+    //     }
+    //     return ReS(res, {message: "Successfully disliked"});
+    // }
+    // else{
+    //     return ReS(res, {message: "Successfully liked"});
+    // }
 }
 module.exports.like = like;
+
+const getTimelinePosts = async function(req, res){
+    let userId = req.query.id;
+    if (!userId){
+        logger.error("Post Controller - getTimelinePosts - User id not entered");
+        return ReE(res, new Error("Enter the User id"), 422);
+    }
+	let err, user;
+    [err, user] = await to(userSchema.findById(userId));
+    if (err || !user){
+        logger.error("Post controller - getTimelinePosts - user not found");
+        return ReE(res, err, 422);
+    }
+		let currentserpost;
+		[err, currentserpost] = await to(postSchema.find({userid : userId}));
+		if (err){
+			logger.error("Post controller - getTimelinePosts - currentserpost not found");
+			return ReE(res, err, 422);
+		}
+		let followingposts;
+		[err, followingposts] = await to(userSchema.aggregate([
+			{
+				$match: {
+					_id: new mongoose.Types.ObjectId(userId)
+				}
+			},
+			{
+				$lookup: {
+					from: "postschemas",
+					localField: "following",
+					foreignField: "userid",
+					as: "followingposts"
+				}
+			},
+			{
+				$project: {
+					followingposts: 1,
+					_id: 0
+				}
+			}
+		]));
+        console.log(followingposts);
+		if (err){
+			logger.error("Post controller - getTimelinePosts - followingposts not found");
+			return ReE(res, err, 422);
+		}
+		return ReS(res, {timeline : currentserpost.concat(...followingposts[0].followingposts).sort((a,b)=> {
+			return b.createdAt-a.createdAt;
+		})});
+}
+module.exports.getTimelinePosts = getTimelinePosts;
