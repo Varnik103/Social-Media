@@ -103,23 +103,23 @@ module.exports.update = update;
 
 
 const Delete = async function (req, res) {
-	let user_id, err, user;
+	let user_id=req.body._id, err, user;
 	if (!user_id) {
 		logger.error("user Controller - Delete : user Id is empty");
 		return ReE(res, new Error('user Id is empty.'), 422);
 	}
-	user = user_id;
+	// user = user_id;
 
 	[err, user] = await to(findByPk(user_id));
 	if (err) {
 		logger.error("user Controller - Delete : user not found", err);
 		return ReE(res, err, 422);
 	}
-	[err, user] = await to(user.destroy());
+	[err, user] = await to(user.deleteOne());
 	if (err) {
 		logger.error("user Controller - Delete : user could not be Deleted", err);
 		return ReE(res, err, 422);
 	}
-	return ReS(res, { message: 'user deleted' }, 204);
+	return ReS(res, { message: 'user deleted' }, 201);
 }
 module.exports.Delete = Delete;
