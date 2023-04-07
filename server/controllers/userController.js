@@ -99,3 +99,27 @@ const update = async function (req, res) {
 	return ReS(res, { message: 'Updated user: ' + user.firstname });
 }
 module.exports.update = update;
+
+
+
+const Delete = async function (req, res) {
+	let user_id, err, user;
+	if (!user_id) {
+		logger.error("user Controller - Delete : user Id is empty");
+		return ReE(res, new Error('user Id is empty.'), 422);
+	}
+	user = user_id;
+
+	[err, user] = await to(findByPk(user_id));
+	if (err) {
+		logger.error("user Controller - Delete : user not found", err);
+		return ReE(res, err, 422);
+	}
+	[err, user] = await to(user.destroy());
+	if (err) {
+		logger.error("user Controller - Delete : user could not be Deleted", err);
+		return ReE(res, err, 422);
+	}
+	return ReS(res, { message: 'user deleted' }, 204);
+}
+module.exports.Delete = Delete;
