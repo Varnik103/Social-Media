@@ -74,6 +74,6 @@ const login = async function(req, res){
         logger.error("Auth Controller - login - Password not matched");
         return ReE(res, new Error("Credentials not matched"), 401);
     }
-    return ReS(res, {message: "Successfully logged in"});
+    return ReS(res, {message: "Successfully logged in", _id:user._id});
 }
 module.exports.login = login;
