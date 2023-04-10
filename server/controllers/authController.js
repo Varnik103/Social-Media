@@ -69,6 +69,10 @@ const login = async function(req, res){
         logger.error("Auth Controller - login - could not find the user");
         return ReE(res, err, 404);
     }
+    if(!user){
+        // logger.error("Auth Controller - login - could not find the user");
+        return ReS(res, {message: "No such user exists"},404);
+    }
     let isMatch = await bcrypt.compare(password, user.password);
     if(!isMatch){
         logger.error("Auth Controller - login - Password not matched");

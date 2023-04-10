@@ -7,9 +7,10 @@ import { BiLocationPlus } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import "./PostShare.css";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadImage } from "../../actions/uploadAction";
+import { uploadImage, uploadPost } from "../../actions/uploadAction";
 
 const PostShare = () => {
+  const loading = useSelector((state)=>state.postReducer.uploading)
   const dispatch = useDispatch();
   const  user  = useSelector((state)=>state.authReducer.authData)
   const [image, setImage] = useState(null);
@@ -21,6 +22,11 @@ const PostShare = () => {
       setImage(img);
     }
   };
+
+  const reset =()=> {
+    setImage(null);
+    desc.current.value="";
+  }
 
   const handleSubmit = (e) =>{
     e.preventDefault();
@@ -43,7 +49,8 @@ const PostShare = () => {
             console.log(error)
         }
     }
-    
+    dispatch(uploadPost(newPost))
+    reset();    
   }
 
   return (
@@ -75,8 +82,9 @@ const PostShare = () => {
             <AiOutlineSchedule />
             Schedule
           </div>
-          <button className="button ps-button" onClick={handleSubmit}>
-            Share
+          <button className="button ps-button" onClick={handleSubmit}
+          disabled={loading}>
+            {loading? "Uploading" : "Share"}
           </button>
 
           <div style={{ display: "none" }}>

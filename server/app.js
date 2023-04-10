@@ -31,10 +31,11 @@ const specs = swaggerJsDoc(options);
 var indexRouter = require("./routes/index");
 
 var app = express();
+app.use(express.static('public'))
+app.use('/images',express.static('images'))
 const cors = require("cors");
 app.use(cors());
 //app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use(logger("dev"));
 app.use(express.json());

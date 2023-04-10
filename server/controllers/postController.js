@@ -9,15 +9,15 @@ const uploadFile = require("../middleware/upload");
 
 const create = async function(req, res){
     let body = req.body;
-	console.log(body);
+	// console.log(body);
     let err, post;
     if (!body.userid){
         logger.error("Post Controller - create - userId can't be empty");
         return ReE(res, new Error("Enter a userId"), 422);
     }
-    if (!body.description){
-        logger.error("Post Controller - create - description can't be empty");
-        return ReE(res, new Error("Enter description"), 422);
+    if (!body.image){
+        logger.error("Post Controller - create - image can't be empty");
+        return ReE(res, new Error("Enter image"), 422);
     }
     // var postInstance = {
     //     userid: body.id,
@@ -171,6 +171,7 @@ const like = async function(req, res){
 module.exports.like = like;
 
 const getTimelinePosts = async function(req, res){
+    // console.log(req.query);
     let userId = req.query.id;
     if (!userId){
         logger.error("Post Controller - getTimelinePosts - User id not entered");
@@ -210,7 +211,7 @@ const getTimelinePosts = async function(req, res){
 				}
 			}
 		]));
-        console.log(followingposts);
+        // console.log(followingposts);
 		if (err){
 			logger.error("Post controller - getTimelinePosts - followingposts not found");
 			return ReE(res, err, 422);
