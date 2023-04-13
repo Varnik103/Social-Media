@@ -3,17 +3,18 @@ import {AiOutlineHeart} from 'react-icons/ai'
 import {AiFillHeart} from 'react-icons/ai'
 import {AiOutlineComment} from 'react-icons/ai'
 import {AiOutlineShareAlt} from 'react-icons/ai'
+import { useSelector } from "react-redux";
 import like from '../../img/like.png'
 import notlike from '../../img/notlike.png'
 import share from '../../img/share.png'
 import comment from '../../img/comment.png'
-
 import './Post.css'
 
 const Post = ({data}) => {
+  const user = useSelector((state) => state.authReducer.authData);
   return (
     <div className="Post">
-        <img src={data.img} alt="" />
+        <img src={data.post.image? process.env.REACT_APP_PUBLIC_FOLDER + '/' + data.post.image: ""} alt="" />
 
         <div className="PostReact">
             <img src={data.liked?like:notlike} alt="" />

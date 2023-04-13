@@ -10,6 +10,7 @@ router.put('/post/update', PostController.update);
 router.delete('/post/delete', PostController.del);
 router.put('/post/like', PostController.like);
 router.get('/post/getTimeline', PostController.getTimelinePosts);
+router.post('/upload', PostController.upload);
 
 router.post('/auth/register', AuthController.register);
 router.post('/auth/login', AuthController.login);
