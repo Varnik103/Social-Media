@@ -1,13 +1,13 @@
 import React from "react"
 import './MiddleSide.css'
 import ProfileTop from '../ProfileTop/ProfileTop'
-import ProfileBottom from '../ProfileBottom/ProfileBottom'
+import PostShare from "../PostShare/PostShare"
 
 const MiddleSide = () => {
     return (
         <div className="MiddleSide">
             <ProfileTop/>
-            {/*<ProfileBottom/>*/}
+            <PostShare/>
         </div>
     )
 }
