@@ -12,7 +12,7 @@ import { uploadImage, uploadPost } from "../../actions/uploadAction";
 const PostShare = () => {
   const loading = useSelector((state)=>state.postReducer.uploading)
   const dispatch = useDispatch();
-  const  {user}  = useSelector((state)=>state.authReducer.authData)
+  const  user  = useSelector((state)=>state.authReducer.authData)
   const [image, setImage] = useState(null);
   const imageRef = useRef();
   const desc = useRef();

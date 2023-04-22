@@ -52,22 +52,22 @@ import { likePost } from "../../api/PostRequest";
 import { useSelector } from "react-redux";
 
 const Post = ({ data }) => {
-  console.log(data.post.likes)
+  // console.log(data)
   const user  = useSelector((state) => state.authReducer.authData);
-  // console.log(user)
+  // console.log(user._id)
   const [liked, setliked] = useState(data.post.likes.includes(user._id));
   const [likes, setlikes] = useState(data.post.likes.length)
 
   
   const handleLike = () => {
-    likePost(data._id, user._id);
+    likePost(data.post._id, user._id);
     setliked((prev) => !prev);
     liked? setlikes((prev)=>prev-1): setlikes((prev)=>prev+1)
   };
   return (
     <div className="Post">
       <img
-        src={data.image ? process.env.REACT_APP_PUBLIC_FOLDER + data.image : ""}
+        src={data.post.image ? process.env.REACT_APP_PUBLIC_FOLDER + '/' + data.post.image : ""}
         alt=""
       />
 
