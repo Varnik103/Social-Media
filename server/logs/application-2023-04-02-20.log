@@ -1,9 +1,0 @@
-{"level":"error","message":"Auth Controller - register - User could not be created","service":"user-service"}
-{"level":"error","message":"Auth Controller - register - User could not be created","service":"user-service"}
-{"level":"error","message":"Auth Controller - register - User could not be created","service":"user-service"}
-{"level":"error","message":"Auth Controller - login - could not find the user","service":"user-service"}
-{"level":"error","message":"Auth Controller - login - could not find the user","service":"user-service"}
-{"level":"error","message":"Auth Controller - login - username not entered","service":"user-service"}
-{"level":"error","message":"Auth Controller - login - could not find the user","service":"user-service"}
-{"level":"error","message":"Auth Controller - login - password not entered","service":"user-service"}
-{"level":"error","message":"Auth Controller - login - Password not matched","service":"user-service"}
